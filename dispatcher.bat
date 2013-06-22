@@ -17,6 +17,9 @@ set BindingIP=*
 set BindingPort=80
 set BindingHostHeader=www.contoso.com
 
+rem ------- DEPLOYMENT SETTINGS -------
+set SourceDirectory=C:\Deployment\%WebsiteName%
+
 rem ------- BACKUP/ARCHIVING SETTINGS -------
 set BackupDirectory=C:\Backup
 
@@ -25,6 +28,7 @@ rem cut off fractional seconds
 set t=%time:~0,8%
 rem remove colons
 set t=%t::=%
+set t=%t: =%
 rem remove slashes
 set d=%date:/=%
 set ArchiveName=%WebsiteName%-%d%-%t%
@@ -151,9 +155,32 @@ ENDLOCAL
 :deploy
 SETLOCAL
 echo Deploying artifacts....
-rem todo
+rem Create a temp deployment directory
+mkdir "%HostingDirectory%-temp-%d%-%t%"
+copy /Y /B /V %SourceDirectory%\* "%HostingDirectory%-temp-%d%-%t%"
+if %ERRORLEVEL% GTR 0 goto :setError %ERRORLEVEL%
+
+echo Updating host directory....
+rename %HostingDirectory% "%WebsiteName%-old-%d%-%t%"
+if %ERRORLEVEL% GTR 0 goto :setError %ERRORLEVEL%
+
+rename %HostingDirectory%-temp-%d%-%t% "%WebsiteName%"
+
+rem If there is an issue replacing the temp deployment directory as the host directory - revert
+if %ERRORLEVEL% EQU 0 goto ALLDEPLOYED
+
+	echo Reverting to original host directory
+	rename %HostingDirectory%-old-%d%-%t% "%WebsiteName%"
+	
+	echo Deleting temporary files   
+	RD /S /Q %HostingDirectory%-temp-%d%-%t%
+	goto :setError %ERRORLEVEL%	
+:ALLDEPLOYED
+
+echo Delete old hosting directory %HostingDirectory%-old-%d%-%t%
+RD /S /Q %HostingDirectory%-old-%d%-%t%
+
 echo Deployed
-rem todo
 goto:eof
 ENDLOCAL
 
