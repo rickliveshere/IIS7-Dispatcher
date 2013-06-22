@@ -15,7 +15,7 @@ set HostingDirectory=C:\inetpub\wwwroot\%WebsiteName%
 set BindingProtocol=http
 set BindingIP=*
 set BindingPort=80
-set BindingHostHeader=www.ssereward.com
+set BindingHostHeader=www.contoso.com
 set BackupDirectory=C:\Backup
 
 echo "Creating app pool...."
@@ -57,10 +57,10 @@ set ArchiveName=%WebsiteName%-%d%-%t%
 call 7z a -tzip "%BackupDirectory%\%ArchiveName%.zip" "%HostingDirectory%\*.*" -mx5
 
 echo "Deploying artifacts...."
-
-
+rem todo
 
 echo "Deployed"
+rem todo
 
 echo "Starting website...."
 call APPCMD start site "%WebsiteName%"
