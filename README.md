@@ -27,7 +27,8 @@ Well - cheer up buddy - your going to make it to the party after all...
 
 INTRODUCING IIS7 DISPATCHER!!!!
 
-(...ahem, ok, ok...it's just a really simple batch script - but it does help and can be modified to suit your needs!)
+...ahem, ok, ok...it's just a really simple batch script :) - but it does help and can be modified to suit your needs!
+It utilizes AppCmd - a command line tool from Microsoft to administer IIS7. To learn how to use AppCmd if you want to modify the script - please goto http://www.iis.net/learn/get-started/getting-started-with-iis/getting-started-with-appcmdexe
 
 
 Setup
