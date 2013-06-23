@@ -51,7 +51,7 @@ Enter the command:<br />
 Switches:<br />
 <code>-?&nbsp;&nbsp;&nbsp;&nbsp;Displays the help menu</code><br />
 <code>-m&nbsp;&nbsp;&nbsp;&nbsp;Manual mode - guides you through a series of questions for setting up a website</code><br />
-<code>-a&nbsp;&nbsp;&nbsp;&nbsp;Automated mode - uses the settings provided in the batch file to execute.<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Useful for running the script as part of a build process without any prompts.</code><br />
+<code>-a&nbsp;&nbsp;&nbsp;&nbsp;Automated mode - uses default settings to execute. These settings can be changed by opening the script in your<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;favourite text editor. Useful when executed as part of an automated build process.</code><br />
 
 If everything goes according to plan, your website should have been setup, backed up, deployed and running. Hey, haven't you got a party to go to?
 
