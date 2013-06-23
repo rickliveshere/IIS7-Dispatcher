@@ -23,6 +23,8 @@ IIS7 Dispatcher when run will perform the following actions:
   - Set the app pool pipeline mode
   - Set the app pool .net runtime
   - Create a website and root virtual directory (if it doesn't already exist)
+  - Setup a website binding (including protocol, ip address and host header)
+  - Associate the website with the app pool
   - Create a host directory (if it doesn't already exist)
   - Create a backup directory (if it doesn't already exist)
   - Stop the website
@@ -38,7 +40,7 @@ Add the following to the PATH system environment variable:
   - The installation directory for 7zip and..
   - C:\Windows\system32\inetsrv
 
-Optionally, you may also like to add the directory where IIS7-Dispatcher resides if you would like to execute it from the command line without having to specify the full installation path each time.
+Optionally, you may also like to add the directory where IIS7-Dispatcher resides.
 
 ##Usage
 Open a new command line window (with administrative privileges) on the server where the website is going to be setup. 
@@ -47,9 +49,9 @@ Enter the command:<br />
 <code>dispatcher [switch]</code>
 
 Switches:<br />
-<code>-?    Displays the help menu</code><br />
-<code>-m    Manual mode - guides you through a series of questions for setting up a website</code><br />
-<code>-a    Automated mode - uses the settings provided in the batch file to execute. Useful for running the script as part of a build process without any prompts.</code><br />
+<code>-?&nbsp;&nbsp;&nbsp;&nbsp;Displays the help menu</code><br />
+<code>-m&nbsp;&nbsp;&nbsp;&nbsp;Manual mode - guides you through a series of questions for setting up a website</code><br />
+<code>-a&nbsp;&nbsp;&nbsp;&nbsp;Automated mode - uses the settings provided in the batch file to execute.<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Useful for running the script as part of a build process without any prompts.</code><br />
 
 If everything goes according to plan, your website should have been setup, backed up, deployed and running. Hey, haven't you got a party to go to?
 
