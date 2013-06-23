@@ -22,6 +22,7 @@ set SourceDirectory=C:\Deployment\%WebsiteName%
 
 rem ------- BACKUP/ARCHIVING SETTINGS -------
 set BackupDirectory=C:\Backup
+set ArchiveDirectory=C:\Archive
 
 rem --* The following code below will ensure your artifacts are backed up in a zip file labeled as [WebsiteName]-[Date]-[Time].zip *--
 rem cut off fractional seconds
@@ -157,8 +158,20 @@ SETLOCAL
 echo Deploying artifacts....
 rem Create a temp deployment directory
 mkdir "%HostingDirectory%-temp-%d%-%t%"
-copy /Y /B /V %SourceDirectory%\* "%HostingDirectory%-temp-%d%-%t%"
+
+rem Check for archive directory
+IF EXIST %ArchiveDirectory% GOTO READYFORARCHIVING
+	echo Creating archive directory %ArchiveDirectory%
+	MKDIR "%ArchiveDirectory%"
+ 	echo Archive directory created
+:READYFORARCHIVING
+
+echo Zipping up contents of source directory to archive
+call 7z a -tzip "%ArchiveDirectory%\%ArchiveName%-deploy-%d%-%t%.zip" "%SourceDirectory%\*" -mx5
 if %ERRORLEVEL% GTR 0 goto :setError %ERRORLEVEL%
+
+echo Extracting deployment....
+call 7z x %ArchiveDirectory%\%ArchiveName%-deploy-%d%-%t%.zip -o%HostingDirectory%-temp-%d%-%t% -y
 
 echo Updating host directory....
 rename %HostingDirectory% "%WebsiteName%-old-%d%-%t%"
@@ -179,6 +192,9 @@ if %ERRORLEVEL% EQU 0 goto ALLDEPLOYED
 
 echo Delete old hosting directory %HostingDirectory%-old-%d%-%t%
 RD /S /Q %HostingDirectory%-old-%d%-%t%
+
+echo Delete old archive
+DEL %ArchiveDirectory%\%ArchiveName%-deploy-%d%-%t%.zip
 
 echo Deployed
 goto:eof
