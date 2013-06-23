@@ -11,7 +11,7 @@ Your mind starts to boggle. You start to map out the process of setting up a new
 
 You slowly start banging your head against the desk.
 
-Well - cheer up buddy - your going to make it to the party after all...
+Well - *cheer up buddy* - your going to make it to the party after all...
 
 ##IIS7 Dispatcher
 It's just a really simple batch script - but it does help and can be modified to suit your needs :)
@@ -34,7 +34,7 @@ IIS7 Dispatcher when run will perform the following actions:
   - Recycle the app pool
 
 ##Setup
-You will need to download nad install a copy of 7zip from here - http://www.7-zip.org/
+You will need to download and install a copy of 7zip from here - http://www.7-zip.org/
 
 Add the following to the PATH system environment variable:
   - The installation directory for 7zip and..
@@ -53,7 +53,8 @@ Switches:<br />
 <code>-m&nbsp;&nbsp;&nbsp;&nbsp;Manual mode - guides you through a series of questions for setting up a website</code><br />
 <code>-a&nbsp;&nbsp;&nbsp;&nbsp;Automated mode - uses default settings to execute. These settings can be changed by opening the script in your<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;favourite text editor. Useful when executed as part of an automated build process.</code><br />
 
-If everything goes according to plan, your website should have been setup, backed up, deployed and running. Hey, haven't you got a party to go to?
+If everything goes according to plan, your website should have been setup, backed up, deployed and running. 
+<br />*Hey, haven't you got a party to go to?*
 
 ####Disclaimer
 This batch script is presented *as-is* and its creator or contributors take no responsibility for any loss or damage without liability resulting from its execution.
