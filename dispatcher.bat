@@ -1,5 +1,7 @@
 @echo off
+cls
 
+rem ------- SETTINGS -------
 rem ------- APP POOL SETTINGS ------- 
 set AppPoolName=DemoWebsite
 
@@ -33,14 +35,33 @@ set t=%t: =%
 rem remove slashes
 set d=%date:/=%
 set ArchiveName=%WebsiteName%-%d%-%t%
+rem ------- END OF SETTINGS -------
 
-rem ------- START OF BATCH SCRIPT -------
+
+
+
+rem ------- BATCH SCRIPT -------
+
+rem Check for parameters
+set command=%1
+
+:RESET
+if "%command%" NEQ "-?" goto CONTINUE
+goto :displayHelp
+goto:eof
+
+:CONTINUE
+if "%command%" EQU "-a" goto BEGINEXECUTION
+if "%command%" EQU "-m" goto displayQuestions
+goto :displayHelp
+goto:eof
+
+:BEGINEXECUTION
 
 rem ------- SCRIPT EXECUTION -------
 call :createAppPool
 call :setPipelineAndRuntime
 call :createWebsite
-
 call :setHostDirectory
 call :setBinding
 call :setAppPool
@@ -56,6 +77,80 @@ goto:eof
 rem ------- END OF SCRIPT EXECUTION -------
 
 rem ------- FUNCTIONS -------
+
+:displayQuestions
+echo Welcome to II7 Dispatcher!
+echo ---------------------------
+echo ***************************
+echo APP POOL SETTINGS
+set /p AppPoolName= 1. What should your AppPool be called in IIS? [Enter name]: 
+echo ***************************
+set /p DotNetVersion= 2. Which .net version? [v2.0/v4.0]: 
+echo ***************************
+set /p PipelineMode= 3. What pipeline mode should the AppPool use? [Integrated/Classic]: 
+echo ***************************
+echo WEBSITE SETTINGS 
+set /p WebsiteName= 4. What name should your website have within IIS? [Enter name]: 
+echo ***************************
+set /p HostingDirectory= 5. What is the path for the hosting directory of the website? [Enter path - for example - c:\inetpub\wwwroot]: 
+if /i [%HostingDirectory:~-1%] NEQ [\] set HostingDirectory=%HostingDirectory%\
+set HostingDirectory=%HostingDirectory%%WebsiteName%
+echo ***************************
+set /p BindingProtocol= 6. What binding protocol does the website use? [http/https]: 
+echo ***************************
+set BindingPort=80
+if "%BindingProtocol%" EQU "https" set BindingPort=443
+if "%BindingProtocol%" EQU "http" set /p BindingPort= 7. What binding port does the website use? [Enter number]: 
+echo ***************************
+set /p BindingIP= 8. What IP address should the website bind to? [For all IP addresses - enter *]: 
+echo ***************************
+set /p BindingHostHeader= 9. What host header should the website bind to? [Enter host header - for example - www.contoso.com]: 
+echo ***************************
+echo DEPLOYMENT SETTINGS
+set /p SourceDirectory= 10. Where are the deployment files located? [Enter file path - for example - c:\deployment\contoso]: 
+if /i [%SourceDirectory:~-1%] EQU [\] set SourceDirectory=%SourceDirectory:~0,-1%
+echo ***************************
+echo ***************************
+echo ***************************
+echo ***************************
+echo YOUR SETTINGS:
+echo App pool: %AppPoolName%
+echo .Net Version: %DotNetVersion%
+echo Pipeline mode: %PipelineMode%
+echo Website name: %WebsiteName%
+echo Host directory: %HostingDirectory%
+echo Binding protocol: %BindingProtocol%
+echo Binding port: %BindingPort%
+echo Binding IP: %BindingIP%
+echo Host Header: %BindingHostHeader%
+echo Directory where files will be deployed from: %SourceDirectory%
+echo ***************************
+set /p SettingsCorrect= Confirm - Are these settings correct? [y/n]: 
+if "%SettingsCorrect%" EQU "y" goto BEGINEXECUTION
+
+goto:eof
+
+:displayHelp
+SETLOCAL
+echo Welcome to II7 Dispatcher!
+echo ---------------------------
+echo ***************************
+echo Your options:
+echo -a    Automated mode - will use the paramters set inside the batch script for execution. Useful when you would like to automate dispatch without any prompts.
+echo -m    Manual mode - provides prompts for providing information for the dispatcher to use.
+echo -?    Help - displays these options.
+echo ***************************
+goto:eof
+ENDLOCAL
+
+call appcmd add apppool /name:%AppPoolName%
+rem error code 183 returned for duplication
+if %ERRORLEVEL% GTR 0 if %ERRORLEVEL% NEQ 183 goto :setError %ERRORLEVEL%
+if %ERRORLEVEL% GTR 0 if %ERRORLEVEL% EQU 183 echo App pool %AppPoolName% already setup
+if %ERRORLEVEL% EQU 0 echo App pool %AppPoolName% created
+goto:eof
+ENDLOCAL
+
 :createAppPool
 SETLOCAL
 echo Creating app pool....
