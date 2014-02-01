@@ -91,6 +91,9 @@ IF [%ErrorMessages%] NEQ [] goto RESTARTWEBSITE
 call :deploy
 IF [%ErrorMessages%] NEQ [] goto RESTARTWEBSITE
 
+call :deleteBackups
+IF [%ErrorMessages%] NEQ [] goto RESTARTWEBSITE
+
 :RESTARTWEBSITE
 call :startWebsite
 call :recycleAppPool
@@ -331,6 +334,14 @@ DEL %ArchiveDirectory%\%ArchiveName%-deploy-%d%-%t%.zip
 if %ERRORLEVEL% GTR 0 call :setError "Failed to delete deployment archive %ArchiveDirectory%\%ArchiveName%-deploy-%d%-%t%.zip - manual deletion required!"
 
 echo Deployed!
+echo.
+goto:eof
+
+:deleteBackups
+echo Deleting old backups....
+echo.
+forfiles /P "%BackupDirectory%" /S /M %WebsiteName%-*.zip /D -10 /C "cmd /c del @PATH"
+if %ERRORLEVEL% GTR 0 call :setError "Failed to delete old backups for %WebsiteName%"
 echo.
 goto:eof
 
