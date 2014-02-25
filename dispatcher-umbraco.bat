@@ -348,7 +348,8 @@ goto:eof
 :deleteBackups
 echo Deleting old backups....
 echo.
-forfiles /P "%BackupDirectory%" /S /M %WebsiteName%-*.zip /D -10 /C "cmd /c del @PATH"
+echo Looking for %BackupDirectory%\%WebsiteName%*.zip
+forfiles /p "%BackupDirectory%" /s /m "%WebsiteName%*.zip" /D -20 /C "cmd /c del @PATH"
 if %ERRORLEVEL% GTR 0 call :setError "Failed to delete old backups for %WebsiteName%"
 echo.
 goto:eof
